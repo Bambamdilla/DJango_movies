@@ -28,6 +28,12 @@ class Genre(models.Model):
     def __str__(self):
         return self.name
 
+class Director(models.Model):
+    name = models.CharField(max_length=30)
+    surname = models.CharField(max_length=30)
+
+    def __str__(self):
+        return f"{self.name} {self.surname}"
 
 class Movie(models.Model):
     title = models.CharField(max_length=120)
@@ -41,12 +47,10 @@ class Movie(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     # dodaje przy nowym obiekcie czas stworzenia
     genre = models.ForeignKey(Genre, null=True, on_delete=models.SET_NULL)
+    director = models.ForeignKey(Director, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return f"{self.title} from {self.released}"
 
-# class Director(models.Model):
-#     name = models.CharField(max_length=30, unique=True)
-#
-#     def __str__(self):
-#         return self.name
+
+
