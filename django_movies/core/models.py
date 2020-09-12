@@ -15,11 +15,6 @@ age_limit_choices = Choices(
 
 class Genre(models.Model):
     name = models.CharField(max_length=20, unique=True)
-    # limit_1 = 3
-    # limit_2 = 7
-    # limit_3 = 13
-    # limit_4 = 18
-    # limit_5 = 21
 
     age_limit = models.IntegerField(choices=age_limit_choices, default=0)
 

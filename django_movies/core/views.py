@@ -1,14 +1,29 @@
 # from django.http import HttpResponse
 from django import views
 from django.shortcuts import render
-from django.views.generic import TemplateView
+from django.views.generic import ListView, FormView
 
 from core.models import Movie, age_limit_choices
+from core.forms import MovieForm
 
 
-class MovieView(TemplateView):
+class MovieCreateView(FormView):
+    template_name = 'form.xhtml'
+    form_class = MovieForm
+
+
+class MovieView(ListView):
     template_name = 'movies.xhtml'
-    extra_context = {'movies': Movie.objects.all()}
+    model = Movie
+
+    def get_context_data(self, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=None, **kwargs)
+        context['age_limit'] = age_limit_choices
+        return context
+
+    # extra_context = {'movies': Movie.objects.all()}
+    # zamiast model = Movie
+
     # def get(self, request):
     #     return render(
     #         request,
