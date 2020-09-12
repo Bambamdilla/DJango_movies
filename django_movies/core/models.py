@@ -1,26 +1,27 @@
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+from model_utils import Choices
 
 
 # Tworząc na modelu działamy na bazie danych.
 # Obiekt tworzymy przez migrację z modelu
 # Create your models here.
 
+age_limit_choices = Choices(
+        (0, 'kids', 'dzieci'),
+        (1, 'teens', 'nastolatki'),
+        (2, 'adults', 'dorośli'),
+    )
+
 class Genre(models.Model):
     name = models.CharField(max_length=20, unique=True)
-    limit_1 = 3
-    limit_2 = 7
-    limit_3 = 13
-    limit_4 = 18
-    limit_5 = 21
-    age_limit_choices = [
-        (limit_1, 3),
-        (limit_2, 7),
-        (limit_3, 13),
-        (limit_4, 18),
-        (limit_5, 21),
-    ]
-    age_limit = models.IntegerField(choices=age_limit_choices, default=limit_1)
+    # limit_1 = 3
+    # limit_2 = 7
+    # limit_3 = 13
+    # limit_4 = 18
+    # limit_5 = 21
+
+    age_limit = models.IntegerField(choices=age_limit_choices, default=0)
 
     # age_limit = models.IntegerField(default=3, validators=[MaxValueValidator(21)])
     # alternatywny sposób, wpisując z ręki
@@ -41,6 +42,18 @@ class Director(models.Model):
         return f"{self.name} {self.surname}"
 
 
+class Country(models.Model):
+    name = models.CharField(max_length=30, unique=True)
+
+    class Meta:
+        ordering = (
+            'name',
+        )
+
+    def __str__(self):
+        return f"{self.name}"
+
+
 class Movie(models.Model):
     title = models.CharField(max_length=120)
     rating = models.IntegerField(
@@ -54,6 +67,7 @@ class Movie(models.Model):
     # dodaje przy nowym obiekcie czas stworzenia
     genre = models.ForeignKey(Genre, null=True, on_delete=models.SET_NULL)
     director = models.ForeignKey(Director, null=True, on_delete=models.SET_NULL)
+    countries = models.ManyToManyField(Country, related_name='movies')
 
     class Meta:
         unique_together = ('title', 'released', 'director')

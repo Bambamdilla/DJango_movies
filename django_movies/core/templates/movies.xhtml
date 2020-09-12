@@ -1,0 +1,15 @@
+{% extends "base.xhtml" %}
+
+{% block content %}
+    <h1>Welcome to Django Movies</h1>
+    <ul>
+            {% for movie in movies %}
+                {% if movie.genre.age_limit != age_limit.adults %}
+                <li>
+                    {{movie.title}} ({{movie.released.year}}) by {{movie.director}}
+                    <br> Age limit: {{movie.genre.get_age_limit_display}}
+                </li>
+                {% endif %}
+            {% endfor %}
+    </ul>
+{% endblock %}

@@ -16,10 +16,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from core.views import hello
+from core.models import Genre, Movie
+from core.views import hello, MovieView
 """ importujemy wg projekt.nazwa"""
+
+# admin.site.register(Genre)
+# admin.site.register(Movie)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('hello/', hello),
+    path('', MovieView.as_view(), name='index'),
 ]
