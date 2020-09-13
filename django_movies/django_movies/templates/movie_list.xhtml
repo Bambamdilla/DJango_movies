@@ -1,14 +1,18 @@
 {% extends "base.xhtml" %}
 
+{% load movie_extras %}
+
 {% block content %}
   <ul>
     {% for movie in object_list %}
-      <li>
-        {{ movie.title }} ({{ movie.released.year }})
-        <a href="{% url 'core:movie_detail' movie.pk %}">detail</a> /
-        <a href="{% url 'core:movie_update' movie.pk %}">update</a> /
-        <a href="{% url 'core:movie_delete' movie.pk %}">delete</a>
-      </li>
+        <li>
+
+          {% movie_format movie short=True %}
+          <a href="{% url 'core:movie_detail' movie.pk %}">detail</a> /
+          <a href="{% url 'core:movie_update' movie.pk %}">update</a> /
+          <a href="{% url 'core:movie_delete' movie.pk %}">delete</a>
+
+        </li>
     {% endfor %}
   </ul>
 {% endblock %}

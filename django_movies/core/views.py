@@ -73,6 +73,10 @@ class MovieListView(ListView):
     template_name = 'movie_list.xhtml'
     model = Movie
 
+    def get_context_data(self, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=None, **kwargs)
+        context['age_limit'] = age_limit_choices
+        return context
 
 class MovieDetailView(DetailView):
     template_name = 'movie_detail.xhtml'
