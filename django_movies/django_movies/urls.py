@@ -17,7 +17,8 @@ from django.contrib import admin
 from django.urls import path
 
 from core.models import Genre, Movie
-from core.views import hello, MovieView, MovieCreateView
+from core.views import hello, MovieView, MovieCreateView, MovieUpdateView, MovieDeleteView
+
 """ importujemy wg projekt.nazwa"""
 
 # admin.site.register(Genre)
@@ -27,6 +28,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('hello/', hello),
     path('', MovieView.as_view(), name='index'),
-    path('movie/create', MovieCreateView.as_view(success_url='create'), name='movie_create')
+    path('movie/create', MovieCreateView.as_view(), name='movie_create'),
+    path('movie/update/<pk>', MovieUpdateView.as_view(), name='movie_update'),
+    path('movie/delete/<pk>', MovieDeleteView.as_view(), name='movie_delete'),
 ]
-

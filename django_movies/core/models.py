@@ -2,16 +2,17 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from model_utils import Choices
 
-
 # Tworząc na modelu działamy na bazie danych.
 # Obiekt tworzymy przez migrację z modelu
 # Create your models here.
 
 age_limit_choices = Choices(
-        (0, 'kids', 'dzieci'),
-        (1, 'teens', 'nastolatki'),
-        (2, 'adults', 'dorośli'),
-    )
+    (0, 'kids', 'dzieci'),
+    (1, 'teens', 'nastolatki'),
+    (2, 'adults', 'dorośli'),
+    # 'kids' to zmienna, 'dzieci' to to, co się wyświetli na stronie
+)
+
 
 class Genre(models.Model):
     name = models.CharField(max_length=20, unique=True)
