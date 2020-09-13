@@ -3,7 +3,7 @@ from concurrent.futures._base import LOGGER
 
 from django import views
 from django.shortcuts import render
-from django.views.generic import ListView, FormView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, FormView, CreateView, UpdateView, DeleteView, DetailView
 from django.urls import reverse_lazy
 
 from core.models import Movie, age_limit_choices
@@ -30,7 +30,7 @@ class MovieCreateView(CreateView):
     # title = 'Add Movie'
     template_name = 'form.xhtml'
     form_class = MovieForm
-    success_url = reverse_lazy('index')
+    success_url = reverse_lazy('core:movie_list')
 
     def form_invalid(self, form):
         LOGGER.warning('Invalid data provided')
@@ -56,7 +56,7 @@ class MovieUpdateView(UpdateView):
     model = Movie
     form_class = MovieForm
     # mając form_class odwołujemy się do konkretnej klasy, ale i tak musimy odwoływać się do modelu
-    success_url = reverse_lazy('index')
+    success_url = reverse_lazy('core:movie_list')
 
     def form_invalid(self, form):
         LOGGER.warning('Invalid data provided')
@@ -66,7 +66,22 @@ class MovieUpdateView(UpdateView):
 class MovieDeleteView(DeleteView):
     template_name = 'movie_confirm_delete.xhtml'
     model = Movie
-    success_url = reverse_lazy('index')
+    success_url = reverse_lazy('core:movie_list')
+
+
+class MovieListView(ListView):
+    template_name = 'movie_list.xhtml'
+    model = Movie
+
+
+class MovieDetailView(DetailView):
+    template_name = 'movie_detail.xhtml'
+    model = Movie
+
+
+class IndexView(MovieListView):
+    template_name = 'movie_list.xhtml'
+    model = Movie
 
 
 class MovieView(ListView):
