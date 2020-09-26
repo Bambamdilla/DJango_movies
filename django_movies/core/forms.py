@@ -2,6 +2,8 @@ from django import forms
 import re
 from datetime import date
 
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Column, Layout, Row, Submit
 from core.models import Genre, Movie
 from django.core.exceptions import ValidationError
 
@@ -39,11 +41,22 @@ class MovieForm(forms.ModelForm):
     title = forms.CharField(validators=[capitalized_validator])
     rating = forms.IntegerField(min_value=1, max_value=10)
     released = PastMonthField()
-    description = forms.CharField(widget=forms.Textarea, required=False)
-    genre = forms.ModelChoiceField(queryset=Genre.objects.all())
-
     # director = forms.ForeignKey(Movie.Director, null=True, on_delete=models.SET_NULL)
     # countries = forms.ModelMultipleChoiceField(Movie.Country, related_name='movies')
+    # niepotrzebne, jeśli nie zmieniamy ich w formularzu
+
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper() # form crispy_forms.helper
+        self.helper.layout = Layout(
+            'title',
+            Row(Column('genre'), Column('rating'), Column('released')),
+            'director',
+            'description',
+            'countries',
+            Submit('submit', 'Submit'),
+        )
 
     def clean_description(self):  # clean_<fieldname>
         initial = self.cleaned_data['description']

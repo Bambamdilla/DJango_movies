@@ -22,9 +22,8 @@ logging.basicConfig(
 )
 
 LOGGER = logging.getLogger(__name__)
-
-
 # bez name'a pewnie też by zadziałał
+
 
 class MovieCreateView(CreateView):
     # title = 'Add Movie'

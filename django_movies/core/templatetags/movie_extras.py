@@ -19,5 +19,5 @@ def attr_as_p(obj, attrname):
     label = escape(attrname.capitalize())
     # nazwa atrybutu - tytuł
     value = escape(getattr(obj, attrname))
-    #
+    # nazwa wartości - tytuł
     return SafeString(f'<p><strong>{label}:</strong> {value}</p>')

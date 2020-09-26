@@ -1,5 +1,7 @@
 {% extends "base.xhtml" %}
 
+{% load movie_extras %}
+
 {% block content %}
 
   {{movie|attr_as_p:'title'}}
@@ -7,6 +9,8 @@
   {{movie|attr_as_p:'genre'}}
   {{movie|attr_as_p:'rating'}}
   {{movie|attr_as_p:'description'}}
+
+{% endif %}
 
 <!--  <p><strong>Title:</strong> {{ object.title }}</p>-->
 <!--  <p><strong>Released:</strong> {{ object.released }}</p>-->
