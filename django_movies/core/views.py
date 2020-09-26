@@ -1,10 +1,11 @@
 # from django.http import HttpResponse
 from concurrent.futures._base import LOGGER
 
-from django import views
 from django.shortcuts import render
 from django.views.generic import ListView, FormView, CreateView, UpdateView, DeleteView, DetailView
 from django.urls import reverse_lazy
+from django import views
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
 
 from core.models import Movie, age_limit_choices
 from core.forms import MovieForm
@@ -13,6 +14,10 @@ import logging
 # class MovieCreateView(FormView):
 #     template_name = 'form.xhtml'
 #     form_class = MovieForm
+
+class StaffRequiredMixin(UserPassesTestMixin):
+    def test_func(self):
+        return self.request.user.is_staff
 
 
 logging.basicConfig(
@@ -25,8 +30,8 @@ LOGGER = logging.getLogger(__name__)
 # bez name'a pewnie też by zadziałał
 
 
-class MovieCreateView(CreateView):
-    # title = 'Add Movie'
+class MovieCreateView(StaffRequiredMixin, LoginRequiredMixin, CreateView):
+    # title = 'Add Movie' # niepotrzebne, przydaje się przy bazie danych
     template_name = 'form.xhtml'
     form_class = MovieForm
     success_url = reverse_lazy('core:movie_list')
@@ -50,7 +55,7 @@ class MovieCreateView(CreateView):
         # return result
 
 
-class MovieUpdateView(UpdateView):
+class MovieUpdateView(StaffRequiredMixin, LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     template_name = 'form.xhtml'
     model = Movie
     form_class = MovieForm
@@ -62,10 +67,15 @@ class MovieUpdateView(UpdateView):
         return super().form_invalid(form)
 
 
-class MovieDeleteView(DeleteView):
+class MovieDeleteView(StaffRequiredMixin, LoginRequiredMixin, DeleteView):
     template_name = 'movie_confirm_delete.xhtml'
     model = Movie
     success_url = reverse_lazy('core:movie_list')
+
+    def test_func(self):
+        super().test_func() # test logiczny, który zatrzymuje funkcję, gdy wyjdzie False
+        return self.request.user.is_superuser
+    # dodatkowa funkcja dodająca sprawdzanie, czy użytkownik jest także superuserem
 
 
 class MovieListView(ListView):
