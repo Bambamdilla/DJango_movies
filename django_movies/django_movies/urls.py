@@ -17,7 +17,8 @@ from django.contrib import admin
 from django.urls import path, include
 
 from core.models import Genre, Movie
-from core.views import hello, MovieView, IndexView
+from core.views import hello, MovieView
+from .views import IndexView
 
 """ importujemy wg projekt.nazwa"""
 
@@ -29,4 +30,5 @@ urlpatterns = [
     path('hello/', hello),
     path('', IndexView.as_view(), name='index'),
     path('core/', include('core.urls', namespace='core')),
+    path('accounts/', include('accounts.urls', namespace='accounts')),
 ]
