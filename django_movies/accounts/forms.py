@@ -2,8 +2,9 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit
 
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm, UserCreationForm
+from accounts.models import SHOE_SIZE, Profile
 
-from django.forms import CharField, Form, Textarea
+from django.forms import IntegerField, Form
 
 
 class SubmittableForm(Form):
@@ -22,5 +23,16 @@ class SubmittablePasswordChangeForm(SubmittableForm, PasswordChangeForm):
 
 
 class SignUpForm(SubmittableForm, UserCreationForm):
+    shoe_size = IntegerField(
+        label='Tell me your shoe size',
+    )
+
     class Meta(UserCreationForm.Meta):
         fields = ['username', 'first_name']
+
+    def save(self, commit=True, *args, **kwargs):
+        user = super().save(commit)
+        shoe_size = self.cleaned_data['shoe_size']
+        profile = Profile(shoe_size=shoe_size, user=user)
+        profile.save()
+        return user

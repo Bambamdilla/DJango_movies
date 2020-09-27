@@ -5,7 +5,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from model_utils import Choices
 
 
-shoe_size = Choices(
+SHOE_SIZE = Choices(
     (0, 36, 36),
     (1, 37, 37),
     (2, 38, 38),
@@ -24,7 +24,7 @@ class Profile(models.Model):
     # shoe_size = models.IntegerField(
     #     null=False, validators=[MaxValueValidator(36), MinValueValidator(47)]
     # )
-    shoe_size = models.IntegerField(choices=shoe_size)
+    shoe_size = models.IntegerField(choices=SHOE_SIZE, default=40)
     user = OneToOneField(User, on_delete=CASCADE)
 
     def __str__(self):
